@@ -990,13 +990,38 @@ namespace SourceCrawler
         private void lblHistoryPosition_MouseHover(object sender, EventArgs e)
         {
             var tt = new ToolTip();
-            tt.SetToolTip(lblHistoryPosition, "History:" + Environment.NewLine + String.Join(Environment.NewLine, _history.Values));
+            tt.SetToolTip(lblHistoryPosition, "Click to see history");
         }
 
         private void lblHistoryPosition_Click(object sender, EventArgs e)
         {
-            var hist = new HistoryPopup(_history.Values);
-            hist.ShowDialog();
+            if (_history.Any())
+            {
+                var hist = new Form();
+                hist.Height = 150;
+                hist.FormBorderStyle = FormBorderStyle.None;
+                var ctl = new HistoryPopup(_history.Values);
+                ctl.Dock = DockStyle.Fill;
+                hist.Controls.Add(ctl);
+                hist.StartPosition = FormStartPosition.Manual;
+                hist.Left = System.Windows.Forms.Cursor.Position.X + 8;
+                hist.Top = System.Windows.Forms.Cursor.Position.Y + 8;
+                hist.Deactivate += Hist_Deactivate;
+                hist.Show();
+            }
+        }
+
+        private void Hist_Deactivate(object sender, EventArgs e)
+        {
+            var frm = sender as Form;
+            var ctl = frm.Controls[0] as HistoryPopup;
+            if (!String.IsNullOrWhiteSpace(ctl.SelectedText))
+            {
+                txtGrep.Text = ctl.SelectedText;
+            }
+
+            frm.Hide();
+            frm.Deactivate -= Hist_Deactivate;
         }
 
         private void copyNameToClipboardToolStripMenuItem_Click(object sender, EventArgs e)

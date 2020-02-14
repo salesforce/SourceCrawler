@@ -1,20 +1,13 @@
-/*
- * Copyright (c) 2020, salesforce.com, inc.
- * All rights reserved.
- * SPDX-License-Identifier: BSD-3-Clause
- * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
- */
-
-namespace SourceCrawler
+﻿namespace SourceCrawler
 {
     partial class HistoryPopup
     {
-        /// <summary>
+        /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
+        /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -27,10 +20,10 @@ namespace SourceCrawler
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region Component Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -40,23 +33,22 @@ namespace SourceCrawler
             // 
             // lbxHistory
             // 
+            this.lbxHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbxHistory.FormattingEnabled = true;
-            this.lbxHistory.Location = new System.Drawing.Point(34, 26);
+            this.lbxHistory.Location = new System.Drawing.Point(0, 0);
             this.lbxHistory.Name = "lbxHistory";
-            this.lbxHistory.Size = new System.Drawing.Size(120, 95);
+            this.lbxHistory.Size = new System.Drawing.Size(339, 182);
             this.lbxHistory.TabIndex = 0;
+            this.lbxHistory.DoubleClick += new System.EventHandler(this.lbxHistory_DoubleClick);
+            this.lbxHistory.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbxHistory_KeyDown);
             // 
             // HistoryPopup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(347, 258);
-            this.ControlBox = false;
             this.Controls.Add(this.lbxHistory);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "HistoryPopup";
-            this.Text = "HistoryPopup";
-            this.Load += new System.EventHandler(this.HistoryPopup_Load);
+            this.Size = new System.Drawing.Size(339, 182);
             this.ResumeLayout(false);
 
         }
