@@ -192,7 +192,6 @@ namespace SourceCrawler
             this.txtGrep.Size = new System.Drawing.Size(256, 20);
             this.txtGrep.TabIndex = 1;
             this.txtGrep.TextChanged += new System.EventHandler(this.SearchBoxTextChanged);
-            this.txtGrep.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtGrep_KeyDown);
             this.txtGrep.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchBoxTextChangedKey);
             // 
             // splitContainer1

@@ -958,35 +958,6 @@ namespace SourceCrawler
             removeTabToolStripMenuItem.Enabled = _tc.TabPages.Count > 1;
         }
 
-        private void txtGrep_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (!_history.Any())
-            {
-                return;
-            }
-
-            if ((e.Control && (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)) &&  _history.Count == 1)
-            {
-                txtGrep.Text = _history[0];
-                return;
-            }
-
-            if (e.Control && e.KeyCode == Keys.Left && _historyCurrent > 0)
-            {
-                _historyCurrent--;
-
-                txtGrep.Text = _history[_historyCurrent];
-                lblHistoryPosition.Text = (_historyCurrent + 1).ToString();
-            }
-
-            if (e.Control && e.KeyCode == Keys.Right && _historyCurrent < _history.Keys.Max() && _historyCurrent < _history.Count() - 1)
-            {
-                _historyCurrent++;
-                txtGrep.Text = _history[_historyCurrent];
-                lblHistoryPosition.Text = (_historyCurrent + 1).ToString();
-            }
-        }
-
         private void lblHistoryPosition_MouseHover(object sender, EventArgs e)
         {
             var tt = new ToolTip();
