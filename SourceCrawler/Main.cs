@@ -46,7 +46,7 @@ namespace SourceCrawler
         Collection<int> _hitLines;
         readonly FindReplace _find;
 
-        private Dictionary<int, string> _history = new Dictionary<int, string>();
+        private Collection<HistoryItem> _history = new Collection<HistoryItem>();
         private int _historyCurrent = -1;
 
         private const int TCM_HITTEST = 0x130D;
@@ -472,11 +472,11 @@ namespace SourceCrawler
             var sourceFile = txtSourceFile.Text;
             var grep = txtGrep.Text;
 
-            if (!_history.Any(h => h.Value.Equals(grep)))
+            if (!_history.Any(h => h.HistoryValue.Equals(grep)))
             {
                 _historyCurrent++;
                 lblHistoryPosition.Text = (_historyCurrent + 1).ToString();
-                _history[_historyCurrent] = grep;
+                _history.Add(new HistoryItem { HistoryValue = grep, Position = _historyCurrent, Timestamp = DateTime.Now });
             }
 
             var dll = txtDLL.Text;
@@ -961,7 +961,8 @@ namespace SourceCrawler
         private void lblHistoryPosition_MouseHover(object sender, EventArgs e)
         {
             var tt = new ToolTip();
-            tt.SetToolTip(lblHistoryPosition, "Click to see history");
+            tt.SetToolTip(lblHistoryPosition, "History:" + Environment.NewLine +
+                String.Join(Environment.NewLine, _history.OrderByDescending(h => h.Timestamp).Select(hv => hv.HistoryValue)));
         }
 
         private void lblHistoryPosition_Click(object sender, EventArgs e)
@@ -971,7 +972,7 @@ namespace SourceCrawler
                 var hist = new Form();
                 hist.Height = 150;
                 hist.FormBorderStyle = FormBorderStyle.None;
-                var ctl = new HistoryPopup(_history.Values);
+                var ctl = new HistoryPopup(_history);
                 ctl.Dock = DockStyle.Fill;
                 hist.Controls.Add(ctl);
                 hist.StartPosition = FormStartPosition.Manual;
@@ -989,6 +990,7 @@ namespace SourceCrawler
             if (!String.IsNullOrWhiteSpace(ctl.SelectedText))
             {
                 txtGrep.Text = ctl.SelectedText;
+                _history.FirstOrDefault(h => h.HistoryValue.Equals(ctl.SelectedText)).Timestamp = DateTime.Now;
             }
 
             frm.Hide();

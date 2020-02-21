@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -21,10 +22,10 @@ namespace SourceCrawler
             InitializeComponent();
         }
 
-        public HistoryPopup(IEnumerable<string> historyList)
+        public HistoryPopup(IEnumerable<HistoryItem> historyList)
         {
             InitializeComponent();
-            lbxHistory.DataSource = new List<string>(historyList);
+            lbxHistory.DataSource = new List<string>(historyList.OrderByDescending(h => h.Timestamp).Select(hv => hv.HistoryValue));
         }
 
         private void lbxHistory_KeyDown(object sender, KeyEventArgs e)
