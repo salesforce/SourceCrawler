@@ -59,14 +59,15 @@ namespace SourceCrawler
                 InsertDefaultOptionRows();
             }
 
-            //Upgrades
-            Upgrade201911();
+            //Check integrity of file
+            if (String.IsNullOrWhiteSpace(GetOptionValue(Constants.VS_LOCATION, false)))
+            {
+                File.Delete(ConfigRepositoryFullPath);
+                SQLiteConnection.CreateFile(ConfigRepositoryFullPath);
+                CreateConfigSchema();
+                InsertDefaultOptionRows();
+            }
         }
-
-        //public static bool RepoExists()
-        //{
-        //    return File.Exists(ConfigRepositoryFullPath);
-        //}
 
         private static void InsertDefaultOptionRows()
         {
@@ -74,16 +75,6 @@ namespace SourceCrawler
             {
                 ExecuteNonQuery(String.Format("insert into options (option_key,option_value,last_update) values ({0},{1},'{2}')",
                     _optionNames[i].SafeStringToSQL(), _optionInitialValues[i].SafeStringToSQL(), DateTime.Now.ToString(Constants.DATETIME_FORMAT)));
-            }
-        }
-
-        private static void Upgrade201911()
-        {
-            var ds = ExecuteQuery($"select * from options where option_key='{Constants.VS_LOCATION}'");
-            if (ds.Tables[0].Rows.Count == 0)
-            {
-                ExecuteNonQuery(String.Format("insert into options (option_key,option_value,last_update) values ({0},{1},'{2}')",
-                    Constants.VS_LOCATION.SafeStringToSQL(), Constants.DEFAULT_VS_LOCATION.SafeStringToSQL(), DateTime.Now.ToString(Constants.DATETIME_FORMAT)));
             }
         }
 
@@ -116,11 +107,15 @@ namespace SourceCrawler
             }
         }
 
-        internal static string GetOptionValue(string keyName)
+        internal static string GetOptionValue(string keyName, bool CheckRepo = true)
         {
             try
             {
-                CheckRepositoryFile();
+                if (CheckRepo)
+                {
+                    CheckRepositoryFile();
+                }
+
                 var dsOption = ExecuteQuery(string.Format("select option_value from options where option_key={0}", keyName.SafeStringToSQL()));
                 return dsOption.Tables[0].Rows[0]["option_value"].ToString();
             }

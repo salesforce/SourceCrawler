@@ -115,10 +115,10 @@ namespace SourceCrawler
             this.progressRefresh,
             this.lblQueryTime,
             this.tsCurrentSolution});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 890);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 759);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1596, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1284, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -311,7 +311,7 @@ namespace SourceCrawler
             this.toolStripButtonOptions});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1596, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(1284, 27);
             this.toolStrip1.TabIndex = 13;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -500,7 +500,7 @@ namespace SourceCrawler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1596, 912);
+            this.ClientSize = new System.Drawing.Size(1284, 781);
             this.Controls.Add(this.lblHistoryPosition);
             this.Controls.Add(this.cboOperDLL);
             this.Controls.Add(this.label6);
@@ -529,7 +529,7 @@ namespace SourceCrawler
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = ".Net Source File Crawler (2020.02)";
+            this.Text = ".Net Source File Crawler (2020.05)";
             this.Load += new System.EventHandler(this.Main_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
