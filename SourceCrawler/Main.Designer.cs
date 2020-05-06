@@ -115,7 +115,7 @@ namespace SourceCrawler
             this.progressRefresh,
             this.lblQueryTime,
             this.tsCurrentSolution});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 759);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 562);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
             this.statusStrip1.Size = new System.Drawing.Size(1284, 22);
@@ -196,18 +196,17 @@ namespace SourceCrawler
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(18, 101);
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.splitContainer1.Location = new System.Drawing.Point(20, 101);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.gridResults);
-            this.splitContainer1.Size = new System.Drawing.Size(1569, 783);
-            this.splitContainer1.SplitterDistance = 736;
+            this.splitContainer1.Size = new System.Drawing.Size(1561, 459);
+            this.splitContainer1.SplitterDistance = 322;
             this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 11;
             // 
@@ -230,7 +229,7 @@ namespace SourceCrawler
             this.gridResults.RowTemplate.ContextMenuStrip = this.mnuContext;
             this.gridResults.RowTemplate.Height = 24;
             this.gridResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridResults.Size = new System.Drawing.Size(736, 783);
+            this.gridResults.Size = new System.Drawing.Size(322, 459);
             this.gridResults.TabIndex = 0;
             this.gridResults.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridResults_CellMouseDown);
             this.gridResults.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridResults_CellMouseEnter);
@@ -500,7 +499,7 @@ namespace SourceCrawler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1284, 781);
+            this.ClientSize = new System.Drawing.Size(1284, 584);
             this.Controls.Add(this.lblHistoryPosition);
             this.Controls.Add(this.cboOperDLL);
             this.Controls.Add(this.label6);

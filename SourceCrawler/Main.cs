@@ -643,7 +643,7 @@ namespace SourceCrawler
                 picWaiting.Visible = false;
                 toolStripButtonRoots.Enabled = true;
                 toolStripButtonOptions.Enabled = true;
-                lblRoot.Text = "No source roots. Please add at least one.";
+                lblRoot.Text = "No source roots. Click \"Root Management\" and add one.";
             } 
         }
 

@@ -95,7 +95,7 @@ namespace SourceCrawler
 
         #endregion
 
-        public const string PROGRAM_NAME = "SourceCrawlerCommunity";
+        public const string PROGRAM_NAME = "SourceCrawler";
         public const string CONNECTION_STRING_FORMAT = @"Data Source={0};Version=3;";
         public const string CONFIG_FILE = "SourceCrawlerCommunityRepo.db";
         public const string CACHE_CONNSTRING = "Data Source=:memory:;Version=3;New=True; Journal Mode=Off";
