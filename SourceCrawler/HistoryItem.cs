@@ -1,15 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SourceCrawler
 {
     public class HistoryItem
     {
         public int Position { get; set; }
-        public string HistoryValue { get; set; }
+        public string FileValue { get; set; }
+        public string GrepyValue { get; set; }
+        public string DLLValue { get; set; }
         public DateTime Timestamp { get; set; }
+
+        public int RestultCount { get; set; }
+        public override string ToString()
+        {
+            return String.Join(", ", new[] { FileValue, GrepyValue, DLLValue }.Where(s => !String.IsNullOrEmpty(s))) + " (" + RestultCount.ToString() + ")";
+        }
     }
 }

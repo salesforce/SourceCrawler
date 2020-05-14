@@ -15,7 +15,7 @@ namespace SourceCrawler
 {
     public partial class HistoryPopup : UserControl
     {
-        public string SelectedText { get; private set; }
+        public HistoryItem SelectedHistoryItem { get; private set; }
 
         public HistoryPopup()
         {
@@ -25,19 +25,19 @@ namespace SourceCrawler
         public HistoryPopup(IEnumerable<HistoryItem> historyList)
         {
             InitializeComponent();
-            lbxHistory.DataSource = new List<string>(historyList.OrderByDescending(h => h.Timestamp).Select(hv => hv.HistoryValue));
+            lbxHistory.DataSource = new List<HistoryItem>(historyList.OrderByDescending(h => h.Timestamp));
         }
 
         private void lbxHistory_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                SelectedText = lbxHistory.SelectedItem.ToString();
+                SelectedHistoryItem = lbxHistory.SelectedItem as HistoryItem;
             }
 
             if (e.KeyCode == Keys.Escape)
             {
-                SelectedText = String.Empty;
+                SelectedHistoryItem = null;
             }
 
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
@@ -49,7 +49,7 @@ namespace SourceCrawler
 
         private void lbxHistory_DoubleClick(object sender, EventArgs e)
         {
-            SelectedText = lbxHistory.SelectedItem.ToString();
+            SelectedHistoryItem = lbxHistory.SelectedItem as HistoryItem;
             lbxHistory_KeyDown(null, new KeyEventArgs(Keys.Enter));
         }
     }

@@ -6,7 +6,6 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
@@ -73,8 +72,6 @@ namespace SourceCrawler
         [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hwnd, int msg, IntPtr wParam, ref TCHITTESTINFO lParam);
 
-       
-
         /// WM_VSCROLL -> 0x0115
         public const int WM_VSCROLL = 277;
 
@@ -139,7 +136,6 @@ namespace SourceCrawler
                 _tc.SelectedIndex = hotTab.TabIndex;
             }
 
-
             for (var i = 0; i < _tc.TabPages.Count; i++)
             {
                 var tabRect = this._tc.GetTabRect(i);
@@ -179,6 +175,62 @@ namespace SourceCrawler
             SetLexer();
 
             _tc.SelectTab(_tc.TabCount - 1);
+            txtSourceFile.Text = String.Empty;
+            txtGrep.Text = String.Empty;
+            txtDLL.Text = String.Empty;
+
+            SetTabTooltip(false);
+        }
+
+        void SetTabTooltip(bool FromDoSearch)
+        {
+            var currentPage = _tc.TabPages[_tc.SelectedIndex];
+
+            currentPage.ToolTipText = !String.IsNullOrWhiteSpace(txtSourceFile.Text) ? "File: " + txtSourceFile.Text + "\r\n" : String.Empty;
+            currentPage.ToolTipText += !String.IsNullOrWhiteSpace(txtGrep.Text) ? "Search: " + txtGrep.Text + "\r\n" : String.Empty;
+            currentPage.ToolTipText += !String.IsNullOrWhiteSpace(txtDLL.Text) ? "DLL: " + txtDLL.Text : String.Empty;
+
+            var t = new TabTag { SourceFileName = txtSourceFile.Text, CodeGrep = txtGrep.Text, DLLFileName = txtDLL.Text };
+
+            var setSelectedRow = true;
+            if (currentPage.Tag != null && (currentPage.Tag as TabTag) != null && _tc.TabPages.Count > 1)
+            {
+                var tg = currentPage.Tag as TabTag;
+                var fromTabSwitch = tg.FromTabSwitch;
+                setSelectedRow = !fromTabSwitch;
+                t.FromTabSwitch = fromTabSwitch;
+                t.RowSelected = tg.RowSelected;
+            }
+
+            if (setSelectedRow)
+            {
+                if (gridResults.SelectedRows.Count > 0)
+                {
+                    t.RowSelected = gridResults.SelectedRows[0].Index;
+                }
+                else
+                {
+                    t.RowSelected = 0;
+                }
+            }
+            else
+            {
+                if (gridResults.Rows.Count > 0 && gridResults.Rows.Count - 1 >= t.RowSelected)
+                {
+                    gridResults.Rows[t.RowSelected].Selected = true;
+
+                }
+            }
+
+            if (FromDoSearch)
+            {
+                t.FromTabSwitch = false;
+            }
+
+#if DEBUG
+            currentPage.ToolTipText += "SELECTED ROW: " + t.RowSelected.ToString();
+#endif
+            currentPage.Tag = t;
         }
 
         private void _tc_DrawItem(object sender, DrawItemEventArgs e)
@@ -208,8 +260,43 @@ namespace SourceCrawler
             _editor = currentPage.Controls[0].Controls.OfType<Scintilla>().First();
             _find.Scintilla = _editor;
             _srcFileFull = currentPage.Controls[0].Controls.OfType<TextBox>().First();
+            if (currentPage.Tag != null && (currentPage.Tag as TabTag) != null)
+            {
+                (currentPage.Tag as TabTag).FromTabSwitch = true;
+            }
+            SetSearchFromTab(currentPage);
+        }
 
+        void SetSearchFromTab(TabPage page)
+        {
+            if (page.Tag == null || (page.Tag as TabTag) == null)
+            {
+                txtSourceFile.Text = String.Empty;
+                txtGrep.Text = String.Empty;
+                txtDLL.Text = String.Empty;
+                return;
+            }
 
+            var t = page.Tag as TabTag;
+            txtSourceFile.Text = t.SourceFileName;
+            txtGrep.Text = t.CodeGrep;
+            txtDLL.Text = t.DLLFileName;
+        }
+
+        void SetSelectedRowIndexFromTab()
+        {
+            var page = _tc.TabPages[_tc.SelectedIndex];
+            if (page.Tag == null || (page.Tag as TabTag) == null)
+            {
+                return;
+            }
+
+            var t = page.Tag as TabTag;
+            if (gridResults.Rows.Count > 0 && gridResults.Rows.Count - 1 >= t.RowSelected)
+            {
+                gridResults.Rows[t.RowSelected].Selected = true;
+                gridResults.FirstDisplayedScrollingRowIndex = t.RowSelected;
+            }
         }
 
         void find_KeyPressed(object sender, KeyEventArgs e)
@@ -307,10 +394,8 @@ namespace SourceCrawler
             
             _editor.ReadOnly = true;
 
-            _tc.TabPages[_tc.SelectedIndex].ToolTipText = !String.IsNullOrWhiteSpace(txtSourceFile.Text) ? "File: " + txtSourceFile.Text + "\r\n" : String.Empty;
-            _tc.TabPages[_tc.SelectedIndex].ToolTipText += !String.IsNullOrWhiteSpace(txtGrep.Text) ? "Search: " + txtGrep.Text + "\r\n" : String.Empty;
-            _tc.TabPages[_tc.SelectedIndex].ToolTipText += !String.IsNullOrWhiteSpace(txtDLL.Text) ? "DLL: " + txtDLL.Text : String.Empty;
-
+            SetTabTooltip(false);
+           
             btnDown_Click(null, null);
         }
 
@@ -462,6 +547,13 @@ namespace SourceCrawler
             {
                 tsCurrentSolution.Text = String.Empty;
             }
+            //tabs
+            foreach (var t in splitContainer1.Panel2.Controls.OfType<TabControl>())
+            {
+                t.Enabled = !IsBusy;
+            }
+
+            mnuContextTabCtl.Enabled = !IsBusy;
         }
 
         private void DoSearch()
@@ -471,14 +563,6 @@ namespace SourceCrawler
 
             var sourceFile = txtSourceFile.Text;
             var grep = txtGrep.Text;
-
-            if (!_history.Any(h => h.HistoryValue.Equals(grep)))
-            {
-                _historyCurrent++;
-                lblHistoryPosition.Text = (_historyCurrent + 1).ToString();
-                _history.Add(new HistoryItem { HistoryValue = grep, Position = _historyCurrent, Timestamp = DateTime.Now });
-            }
-
             var dll = txtDLL.Text;
 
             var o = new[] { (cboOperator.SelectedItem as Operator).oper, (cboOperDLL.SelectedItem as Operator).oper };
@@ -501,6 +585,24 @@ namespace SourceCrawler
                     ClearEditor();
                 }
                 lblQueryTime.Text = $"({perf.Elapsed.Milliseconds.ToString()}ms)";
+                SetSelectedRowIndexFromTab();
+                SetTabTooltip(true);
+
+                if (!_history.Any(h => h.FileValue.Equals(sourceFile) && h.GrepyValue.Equals(grep) && h.DLLValue.Equals(dll)))
+                {
+                    _historyCurrent++;
+                    lblHistoryPosition.Text = (_historyCurrent + 1).ToString();
+
+                    _history.Add(new HistoryItem
+                    {
+                        FileValue = sourceFile,
+                        GrepyValue = grep,
+                        DLLValue = dll,
+                        Position = _historyCurrent,
+                        Timestamp = DateTime.Now,
+                        RestultCount = lblResultCount.Text.SafeToInt32()
+                    });
+                }
             }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
 
             t.ContinueWith(s1 => { MessageBox.Show("Exception:" + s1.Exception.Message); }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.FromCurrentSynchronizationContext());
@@ -544,6 +646,7 @@ namespace SourceCrawler
 
                 if (dr == DialogResult.OK)
                 {
+                    RemoveAllButMainTab();
                     txtSourceFile.Text = String.Empty;
                     txtGrep.Text = String.Empty;
                     txtDLL.Text = String.Empty;
@@ -643,7 +746,7 @@ namespace SourceCrawler
                 picWaiting.Visible = false;
                 toolStripButtonRoots.Enabled = true;
                 toolStripButtonOptions.Enabled = true;
-                lblRoot.Text = "No source roots. Click \"Root Management\" and add one.";
+                lblRoot.Text = "No source roots. Please add at least one.";
             } 
         }
 
@@ -948,6 +1051,16 @@ namespace SourceCrawler
             CreateNewTab();
         }
 
+        void RemoveAllButMainTab()
+        {
+            while (_tc.TabPages.Count > 1)
+            {
+                removeTabToolStripMenuItem_Click(null, null);
+            }
+
+            _tc.TabPages[0].ToolTipText = String.Empty;
+        }
+
         private void removeTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _tc.TabPages.RemoveAt(_tc.SelectedIndex);
@@ -962,7 +1075,7 @@ namespace SourceCrawler
         {
             var tt = new ToolTip();
             tt.SetToolTip(lblHistoryPosition, "History:" + Environment.NewLine +
-                String.Join(Environment.NewLine, _history.OrderByDescending(h => h.Timestamp).Select(hv => hv.HistoryValue)));
+                String.Join(Environment.NewLine, _history.OrderByDescending(h => h.Timestamp).Select(hv => hv)));
         }
 
         private void lblHistoryPosition_Click(object sender, EventArgs e)
@@ -987,10 +1100,13 @@ namespace SourceCrawler
         {
             var frm = sender as Form;
             var ctl = frm.Controls[0] as HistoryPopup;
-            if (!String.IsNullOrWhiteSpace(ctl.SelectedText))
+            if (ctl.SelectedHistoryItem != null)
             {
-                txtGrep.Text = ctl.SelectedText;
-                _history.FirstOrDefault(h => h.HistoryValue.Equals(ctl.SelectedText)).Timestamp = DateTime.Now;
+                txtSourceFile.Text = ctl.SelectedHistoryItem.FileValue;
+                txtGrep.Text = ctl.SelectedHistoryItem.GrepyValue;
+                txtDLL.Text = ctl.SelectedHistoryItem.DLLValue;
+
+                _history.FirstOrDefault(h => h.Equals(ctl.SelectedHistoryItem)).Timestamp = DateTime.Now;
             }
 
             frm.Hide();

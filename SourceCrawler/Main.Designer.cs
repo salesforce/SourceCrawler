@@ -115,10 +115,10 @@ namespace SourceCrawler
             this.progressRefresh,
             this.lblQueryTime,
             this.tsCurrentSolution});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 562);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 890);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1284, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1596, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -196,8 +196,9 @@ namespace SourceCrawler
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.Location = new System.Drawing.Point(20, 101);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(2);
             this.splitContainer1.Name = "splitContainer1";
@@ -205,8 +206,8 @@ namespace SourceCrawler
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.gridResults);
-            this.splitContainer1.Size = new System.Drawing.Size(1561, 459);
-            this.splitContainer1.SplitterDistance = 322;
+            this.splitContainer1.Size = new System.Drawing.Size(1569, 787);
+            this.splitContainer1.SplitterDistance = 627;
             this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 11;
             // 
@@ -229,7 +230,7 @@ namespace SourceCrawler
             this.gridResults.RowTemplate.ContextMenuStrip = this.mnuContext;
             this.gridResults.RowTemplate.Height = 24;
             this.gridResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridResults.Size = new System.Drawing.Size(322, 459);
+            this.gridResults.Size = new System.Drawing.Size(627, 787);
             this.gridResults.TabIndex = 0;
             this.gridResults.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridResults_CellMouseDown);
             this.gridResults.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridResults_CellMouseEnter);
@@ -310,7 +311,7 @@ namespace SourceCrawler
             this.toolStripButtonOptions});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1284, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(1596, 27);
             this.toolStrip1.TabIndex = 13;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -377,7 +378,7 @@ namespace SourceCrawler
             // 
             this.lblHits.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblHits.AutoSize = true;
-            this.lblHits.Location = new System.Drawing.Point(1370, 76);
+            this.lblHits.Location = new System.Drawing.Point(1343, 76);
             this.lblHits.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblHits.Name = "lblHits";
             this.lblHits.Size = new System.Drawing.Size(25, 13);
@@ -389,7 +390,7 @@ namespace SourceCrawler
             this.lblHitAt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblHitAt.AutoSize = true;
             this.lblHitAt.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblHitAt.Location = new System.Drawing.Point(1526, 71);
+            this.lblHitAt.Location = new System.Drawing.Point(1499, 71);
             this.lblHitAt.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblHitAt.Name = "lblHitAt";
             this.lblHitAt.Size = new System.Drawing.Size(15, 13);
@@ -400,7 +401,7 @@ namespace SourceCrawler
             // 
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUp.Image = global::SourceCrawler.Properties.Resources.Sort_Up_48;
-            this.btnUp.Location = new System.Drawing.Point(1550, 58);
+            this.btnUp.Location = new System.Drawing.Point(1523, 58);
             this.btnUp.Margin = new System.Windows.Forms.Padding(2);
             this.btnUp.Name = "btnUp";
             this.btnUp.Size = new System.Drawing.Size(37, 37);
@@ -412,7 +413,7 @@ namespace SourceCrawler
             // 
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDown.Image = global::SourceCrawler.Properties.Resources.Sort_Down_48;
-            this.btnDown.Location = new System.Drawing.Point(1485, 58);
+            this.btnDown.Location = new System.Drawing.Point(1458, 58);
             this.btnDown.Margin = new System.Windows.Forms.Padding(2);
             this.btnDown.Name = "btnDown";
             this.btnDown.Size = new System.Drawing.Size(37, 37);
@@ -499,7 +500,7 @@ namespace SourceCrawler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1284, 584);
+            this.ClientSize = new System.Drawing.Size(1596, 912);
             this.Controls.Add(this.lblHistoryPosition);
             this.Controls.Add(this.cboOperDLL);
             this.Controls.Add(this.label6);

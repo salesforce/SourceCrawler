@@ -100,7 +100,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="HistoryItem.cs" />
     <Compile Include="HistoryPopup.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="HistoryPopup.Designer.cs">
       <DependentUpon>HistoryPopup.cs</DependentUpon>
@@ -144,6 +144,7 @@
     <Compile Include="RepositoryUtils.cs" />
     <Compile Include="RootObject.cs" />
     <Compile Include="SourceData.cs" />
+    <Compile Include="TabTag.cs" />
     <Compile Include="WhereClauseManager.cs" />
     <EmbeddedResource Include="Confirm.resx">
       <DependentUpon>Confirm.cs</DependentUpon>
