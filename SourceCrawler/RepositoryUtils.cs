@@ -85,16 +85,16 @@ namespace SourceCrawler
             return ds.Tables[0].Rows[0][0].SafeToInt32() > 0;
         }
 
-        internal static string GetDefaultRootId()
+        internal static string[] GetDefaultRootId()
         {
             try
             {
                 CheckRepositoryFile();
-                var ds = RepositoryUtils.ExecuteQuery("select root_id from roots where is_default=1"); // should be only 1 record
+                var ds = RepositoryUtils.ExecuteQuery("select root_id,root_path from roots where is_default=1"); // should be only 1 record
 
                 if (ds.Tables[0].Rows.Count == 1)
                 {
-                    return ds.Tables[0].Rows[0]["root_id"].ToString();
+                    return new[] { ds.Tables[0].Rows[0]["root_id"].ToString(), ds.Tables[0].Rows[0]["root_path"].ToString() };
                 }
                 else
                 {
@@ -106,6 +106,8 @@ namespace SourceCrawler
                 throw ex;
             }
         }
+
+
 
         internal static string GetOptionValue(string keyName, bool CheckRepo = true)
         {
@@ -216,6 +218,7 @@ namespace SourceCrawler
 
         public static Collection<RootObject> GetAllRoots()
         {
+            CheckRepositoryFile();
             var ds = ExecuteQuery("select * from roots order by root_path");
             var ret = new Collection<RootObject>();
             foreach (DataRow dr in ds.Tables[0].Rows)

@@ -551,24 +551,31 @@ namespace SourceCrawler
         /// <returns></returns>
         public SourceData GetSourceData(string SourceId)
         {
-            var SQL = String.Format(@"select sol.solution_path, sol.solution_file, sf.source, sf.source_path, sf.source_file, pr.project_path, pr.project_file
+            try
+            {
+                var SQL = String.Format(@"select sol.solution_path, sol.solution_file, sf.source, sf.source_path, sf.source_file, pr.project_path, pr.project_file
                 from source_files sf
                 inner join solutions sol on sf.solution_id=sol.solution_id
                 inner join projects pr on sf.project_id=pr.project_id
                 where sf.source_file_id='{0}'", SourceId);
-            
-            var ds = ExecuteQueryCache(SQL);
 
-            return new SourceData
+                var ds = ExecuteQueryCache(SQL);
+
+                return new SourceData
+                {
+                    FullSourceText = ds.Tables[0].Rows[0][2].ToString(),
+                    PathToSolution = ds.Tables[0].Rows[0][0].ToString(),
+                    PathToSource = ds.Tables[0].Rows[0][3].ToString(),
+                    SolutionFileName = ds.Tables[0].Rows[0][1].ToString(),
+                    SourceFileName = ds.Tables[0].Rows[0][4].ToString(),
+                    PathToProject = ds.Tables[0].Rows[0][5].ToString(),
+                    ProjectFileName = ds.Tables[0].Rows[0][6].ToString()
+                };
+            }
+            catch (Exception ex)
             {
-                FullSourceText = ds.Tables[0].Rows[0][2].ToString(),
-                PathToSolution = ds.Tables[0].Rows[0][0].ToString(),
-                PathToSource = ds.Tables[0].Rows[0][3].ToString(),
-                SolutionFileName = ds.Tables[0].Rows[0][1].ToString(),
-                SourceFileName = ds.Tables[0].Rows[0][4].ToString(),
-                PathToProject = ds.Tables[0].Rows[0][5].ToString(),
-                ProjectFileName = ds.Tables[0].Rows[0][6].ToString()
-            };
+                throw new Exception($"Unable to retrieve source. ({ex.Message})", ex);
+            }
         }
 
         private string EscapeSpecialCharacters(string stringIn)

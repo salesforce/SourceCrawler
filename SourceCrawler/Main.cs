@@ -366,37 +366,44 @@ namespace SourceCrawler
         }
         void gridResults_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (gridResults.SelectedRows.Count == 0) return;
-
-            var src = _repo.GetSourceData(gridResults.SelectedRows[0].Cells[0].Value.ToString());
-
-            _editor.ReadOnly = false;
-            _editor.Text = src.FullSourceText;
-
-            SetToolStrip(src.SolutionPathAndFileName, Color.Black);
-
-            _srcFileFull.Text = src.SourcePathAndFileName;
-            
-            if (!String.IsNullOrWhiteSpace(txtGrep.Text))
+            try
             {
-                HighlightWord(txtGrep.Text);
-                btnDown.Enabled = true;
-                btnUp.Enabled = true;
+                if (gridResults.SelectedRows.Count == 0) return;
 
+                var src = _repo.GetSourceData(gridResults.SelectedRows[0].Cells[0].Value.ToString());
+
+                _editor.ReadOnly = false;
+                _editor.Text = src.FullSourceText;
+
+                SetToolStrip(src.SolutionPathAndFileName, Color.Black);
+
+                _srcFileFull.Text = src.SourcePathAndFileName;
+
+                if (!String.IsNullOrWhiteSpace(txtGrep.Text))
+                {
+                    HighlightWord(txtGrep.Text);
+                    btnDown.Enabled = true;
+                    btnUp.Enabled = true;
+
+                }
+                else
+                {
+                    lblHitAt.Text = String.Empty;
+                    lblHits.Text = String.Empty;
+                    btnDown.Enabled = false;
+                    btnUp.Enabled = false;
+                }
+
+                _editor.ReadOnly = true;
+
+                SetTabTooltip(false);
+
+                btnDown_Click(null, null);
             }
-            else
+            catch (Exception ex)
             {
-                lblHitAt.Text = String.Empty;
-                lblHits.Text = String.Empty;
-                btnDown.Enabled = false;
-                btnUp.Enabled = false;
+                MessageBox.Show(ex.Message);
             }
-            
-            _editor.ReadOnly = true;
-
-            SetTabTooltip(false);
-           
-            btnDown_Click(null, null);
         }
 
         void SetLexer()
@@ -673,7 +680,7 @@ namespace SourceCrawler
 
                     t.ContinueWith(r =>
                     {
-                        RefreshCount();
+                        lblCount.Text = _repo.GetSourceCount().ToString();
                         ManageControls(false);
                         progressRefresh.Value = 0;
 
@@ -710,8 +717,8 @@ namespace SourceCrawler
             txtGrep.Text = String.Empty;
             lblHitAt.Text = String.Empty;
 
-            var defaultRootId = RepositoryUtils.GetDefaultRootId();
-            if (defaultRootId != null)
+            var defaultRoot = RepositoryUtils.GetDefaultRootId();
+            if (defaultRoot != null)
             {
                 var progressHandler = new Progress<ProgressResult>(value =>
                 {
@@ -723,7 +730,13 @@ namespace SourceCrawler
                 });
                 var progress = progressHandler as IProgress<ProgressResult>;
 
-                var t = Task.Run(() => _repo = new RepositoryFile(defaultRootId, progress));
+                var t = Task.Run(() => _repo = new RepositoryFile(defaultRoot[0], progress));
+                t.ContinueWith(r =>
+                {
+                    MessageBox.Show($"Error retrieving root {defaultRoot[1]}. Please remove and re-add it.");
+                    ManageControls(false);
+                }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.FromCurrentSynchronizationContext());
+
                 t.ContinueWith(r =>
                 {
                     lblRoot.Text = _repo.Root.RootPath;
@@ -746,7 +759,7 @@ namespace SourceCrawler
                 picWaiting.Visible = false;
                 toolStripButtonRoots.Enabled = true;
                 toolStripButtonOptions.Enabled = true;
-                lblRoot.Text = "No source roots. Please add at least one.";
+                lblRoot.Text = "No default source root found. Please add at least one.";
             } 
         }
 

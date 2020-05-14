@@ -37,7 +37,6 @@ namespace SourceCrawler
         {
             this.components = new System.ComponentModel.Container();
             this.btnOk = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
             this.lbxRoots = new System.Windows.Forms.ListBox();
             this.mnuContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addNewRootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +49,7 @@ namespace SourceCrawler
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(118, 214);
+            this.btnOk.Location = new System.Drawing.Point(163, 214);
             this.btnOk.Margin = new System.Windows.Forms.Padding(2);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(72, 26);
@@ -58,17 +57,6 @@ namespace SourceCrawler
             this.btnOk.Text = "Ok";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(208, 214);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(72, 26);
-            this.btnCancel.TabIndex = 2;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // lbxRoots
             // 
@@ -141,14 +129,12 @@ namespace SourceCrawler
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(398, 260);
             this.ControlBox = false;
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.lbxRoots);
-            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -164,7 +150,6 @@ namespace SourceCrawler
         #endregion
 
         private System.Windows.Forms.Button btnOk;
-        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.ListBox lbxRoots;
         private System.Windows.Forms.ContextMenuStrip mnuContext;
         private System.Windows.Forms.ToolStripMenuItem addNewRootToolStripMenuItem;

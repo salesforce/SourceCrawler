@@ -49,7 +49,7 @@ namespace SourceCrawler
                 var progress = progressHandler as IProgress<ProgressResult>;
                 var t = Task.Run(() =>
                 {
-                    var defaultRootId = RepositoryUtils.GetDefaultRootId();
+                    var defaultRootId = RepositoryUtils.GetDefaultRootId()[0];
                     if (defaultRootId != null)
                     {
                         progress.Report(new ProgressResult {ProgressValue = 0, WorkingOn = "Caching..."});

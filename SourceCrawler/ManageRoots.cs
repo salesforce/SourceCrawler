@@ -27,7 +27,7 @@ namespace SourceCrawler
 
             if (_allRoots.Count > 0)
             {
-                lbxRoots.SelectedItem = _allRoots.First(r => r.IsDefault);
+                lbxRoots.SelectedItem = _allRoots.FirstOrDefault(r => r.IsDefault);
             }
             else
             {
@@ -54,6 +54,8 @@ namespace SourceCrawler
                 _allRoots.Add(newRoot);
                 lbxRoots.SelectedItem = newRoot;
             }
+
+            AdjustAddRemoveButtons();
         }
 
         private void deleteRootToolStripMenuItem_Click(object sender, EventArgs e)
@@ -66,13 +68,28 @@ namespace SourceCrawler
 
             var IdToDelete = (lbxRoots.SelectedItem as RootObject).RootId;
             var objToDelete = _allRoots.First(r => r.RootId == IdToDelete);
-            if (IdToDelete == _currentRepo.Root.RootId)
+
+            if (_currentRepo != null && IdToDelete == _currentRepo.Root.RootId)
             {
                 _currentRepo.ClearCache();
             }
 
             RepositoryUtils.DeleteRoot(IdToDelete);
             _allRoots.Remove(objToDelete);
+
+            AdjustAddRemoveButtons();
+        }
+
+        private void AdjustAddRemoveButtons()
+        {
+            if (lbxRoots.SelectedItem != null)
+            {
+                btnRemove.Enabled = true;
+            }
+            else
+            {
+                btnRemove.Enabled = false;
+            }
         }
 
         private void lbxRoots_MouseUp(object sender, MouseEventArgs e)
@@ -83,18 +100,32 @@ namespace SourceCrawler
                 
                 lbxRoots.SelectedItems.Clear();
                 lbxRoots.SelectedIndex = lbxRoots.IndexFromPoint(e.X, e.Y);
+                if (lbxRoots.SelectedItems.Count > 0)
+                {
+                    deleteRootToolStripMenuItem.Enabled = true;
+                }
+                else
+                {
+                    deleteRootToolStripMenuItem.Enabled = false;
+                }
+
                 mnuContext.Show(MousePosition);
             }
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            foreach (var item in _allRoots)
+            //Check if a default exists
+            if (lbxRoots.SelectedItem != null)
             {
-                item.IsDefault = lbxRoots.SelectedItem.Equals(item);
+                foreach (var item in _allRoots)
+                {
+                    item.IsDefault = lbxRoots.SelectedItem.Equals(item);
 
-                RepositoryUtils.Upsert(item);
+                    RepositoryUtils.Upsert(item);
+                }
             }
+
             DialogResult = DialogResult.OK;
         }
 
