@@ -5,6 +5,7 @@ SourceCrawler is designed to search a large monolithic C# code base using an in-
 ## Getting Started
 1. Clone the repository
 2. Compile the code in VS (created with VS 2017) or MSBuild
+3. Or you could run the latest install in the Release tab
 
 ## Program execution and use
 1. Click "Root Management"
