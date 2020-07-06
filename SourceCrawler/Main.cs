@@ -163,8 +163,8 @@ namespace SourceCrawler
             _tc.TabPages.Add("");
 
             _tc.TabPages[_tc.TabCount-1].Controls.Add(ec);
-            _editor = ec.Controls.OfType<Scintilla>().First();
-            _srcFileFull = ec.Controls.OfType<TextBox>().First();
+            _editor = ec.GetEditorControl;
+            _srcFileFull = ec.GetTextBox;
 
             _editor.Dock = DockStyle.Fill;
             _editor.Margins[0].Width = 0;

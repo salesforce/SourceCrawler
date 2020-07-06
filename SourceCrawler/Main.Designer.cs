@@ -529,7 +529,7 @@ namespace SourceCrawler
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = ".Net Source File Crawler (2020.05)";
+            this.Text = ".Net Source File Crawler (2020.07)";
             this.Load += new System.EventHandler(this.Main_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
