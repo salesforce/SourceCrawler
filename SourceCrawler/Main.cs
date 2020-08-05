@@ -180,6 +180,7 @@ namespace SourceCrawler
             txtDLL.Text = String.Empty;
 
             SetTabTooltip(false);
+            ClearEditor();
         }
 
         void SetTabTooltip(bool FromDoSearch)
@@ -257,9 +258,9 @@ namespace SourceCrawler
         private void _tc_SelectedIndexChanged(object sender, EventArgs e)
         {
             var currentPage = _tc.TabPages[_tc.SelectedIndex];
-            _editor = currentPage.Controls[0].Controls.OfType<Scintilla>().First();
+            _editor = currentPage.Controls[0].Controls[0].Controls.OfType<Scintilla>().First();
             _find.Scintilla = _editor;
-            _srcFileFull = currentPage.Controls[0].Controls.OfType<TextBox>().First();
+            _srcFileFull = currentPage.Controls[0].Controls[1].Controls.OfType<TextBox>().First();
             if (currentPage.Tag != null && (currentPage.Tag as TabTag) != null)
             {
                 (currentPage.Tag as TabTag).FromTabSwitch = true;

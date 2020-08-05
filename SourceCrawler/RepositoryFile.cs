@@ -240,10 +240,10 @@ namespace SourceCrawler
             {
                 //eat this
             }
-            //catch (DirectoryNotFoundException noDirEx)
-            //{
-
-            //}
+            catch (DirectoryNotFoundException noDirEx)
+            {
+                //eat this too
+            }
 
             if (filesInThisRoot != null)
             {
