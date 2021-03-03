@@ -178,12 +178,11 @@ namespace SourceCrawler
             txtSourceFile.Text = String.Empty;
             txtGrep.Text = String.Empty;
             txtDLL.Text = String.Empty;
-
-            SetTabTooltip(false);
+            
             ClearEditor();
         }
 
-        void SetTabTooltip(bool FromDoSearch)
+        void SetTabTooltip()
         {
             var currentPage = _tc.TabPages[_tc.SelectedIndex];
 
@@ -191,46 +190,15 @@ namespace SourceCrawler
             currentPage.ToolTipText += !String.IsNullOrWhiteSpace(txtGrep.Text) ? "Search: " + txtGrep.Text + "\r\n" : String.Empty;
             currentPage.ToolTipText += !String.IsNullOrWhiteSpace(txtDLL.Text) ? "DLL: " + txtDLL.Text : String.Empty;
 
-            var t = new TabTag { SourceFileName = txtSourceFile.Text, CodeGrep = txtGrep.Text, DLLFileName = txtDLL.Text };
-
-            var setSelectedRow = true;
-            if (currentPage.Tag != null && (currentPage.Tag as TabTag) != null && _tc.TabPages.Count > 1)
+            var t = new TabTag
             {
-                var tg = currentPage.Tag as TabTag;
-                var fromTabSwitch = tg.FromTabSwitch;
-                setSelectedRow = !fromTabSwitch;
-                t.FromTabSwitch = fromTabSwitch;
-                t.RowSelected = tg.RowSelected;
-            }
+                SourceFileName = txtSourceFile.Text,
+                CodeGrep = txtGrep.Text,
+                DLLFileName = txtDLL.Text,
+                DataSource = gridResults.DataSource,
+                ResultCount = lblResultCount.Text
+            };
 
-            if (setSelectedRow)
-            {
-                if (gridResults.SelectedRows.Count > 0)
-                {
-                    t.RowSelected = gridResults.SelectedRows[0].Index;
-                }
-                else
-                {
-                    t.RowSelected = 0;
-                }
-            }
-            else
-            {
-                if (gridResults.Rows.Count > 0 && gridResults.Rows.Count - 1 >= t.RowSelected)
-                {
-                    gridResults.Rows[t.RowSelected].Selected = true;
-
-                }
-            }
-
-            if (FromDoSearch)
-            {
-                t.FromTabSwitch = false;
-            }
-
-#if DEBUG
-            currentPage.ToolTipText += "SELECTED ROW: " + t.RowSelected.ToString();
-#endif
             currentPage.Tag = t;
         }
 
@@ -261,10 +229,7 @@ namespace SourceCrawler
             _editor = currentPage.Controls[0].Controls[0].Controls.OfType<Scintilla>().First();
             _find.Scintilla = _editor;
             _srcFileFull = currentPage.Controls[0].Controls[1].Controls.OfType<TextBox>().First();
-            if (currentPage.Tag != null && (currentPage.Tag as TabTag) != null)
-            {
-                (currentPage.Tag as TabTag).FromTabSwitch = true;
-            }
+
             SetSearchFromTab(currentPage);
         }
 
@@ -275,13 +240,33 @@ namespace SourceCrawler
                 txtSourceFile.Text = String.Empty;
                 txtGrep.Text = String.Empty;
                 txtDLL.Text = String.Empty;
+                lblResultCount.Text = String.Empty;
                 return;
             }
 
+            if (_timerGrep.Enabled)
+                _timerGrep.Stop();
             var t = page.Tag as TabTag;
+
+            this.txtGrep.TextChanged -= new System.EventHandler(this.SearchBoxTextChanged);
+            this.txtGrep.KeyUp -= new System.Windows.Forms.KeyEventHandler(this.SearchBoxTextChangedKey);
+            this.txtSourceFile.TextChanged -= new System.EventHandler(this.SearchBoxTextChanged);
+            this.txtSourceFile.KeyUp -= new System.Windows.Forms.KeyEventHandler(this.SearchBoxTextChangedKey);
+            this.txtDLL.TextChanged -= new System.EventHandler(this.SearchBoxTextChanged);
+            this.txtDLL.KeyUp -= new System.Windows.Forms.KeyEventHandler(this.SearchBoxTextChangedKey);
+
             txtSourceFile.Text = t.SourceFileName;
             txtGrep.Text = t.CodeGrep;
             txtDLL.Text = t.DLLFileName;
+            gridResults.DataSource = t.DataSource;
+            lblResultCount.Text = t.ResultCount;
+
+            this.txtGrep.TextChanged += new System.EventHandler(this.SearchBoxTextChanged);
+            this.txtGrep.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchBoxTextChangedKey);
+            this.txtSourceFile.TextChanged += new System.EventHandler(this.SearchBoxTextChanged);
+            this.txtSourceFile.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchBoxTextChangedKey);
+            this.txtDLL.TextChanged += new System.EventHandler(this.SearchBoxTextChanged);
+            this.txtDLL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchBoxTextChangedKey);
         }
 
         void SetSelectedRowIndexFromTab()
@@ -293,11 +278,6 @@ namespace SourceCrawler
             }
 
             var t = page.Tag as TabTag;
-            if (gridResults.Rows.Count > 0 && gridResults.Rows.Count - 1 >= t.RowSelected)
-            {
-                gridResults.Rows[t.RowSelected].Selected = true;
-                gridResults.FirstDisplayedScrollingRowIndex = t.RowSelected;
-            }
         }
 
         void find_KeyPressed(object sender, KeyEventArgs e)
@@ -396,8 +376,6 @@ namespace SourceCrawler
                 }
 
                 _editor.ReadOnly = true;
-
-                SetTabTooltip(false);
 
                 btnDown_Click(null, null);
             }
@@ -594,7 +572,7 @@ namespace SourceCrawler
                 }
                 lblQueryTime.Text = $"({perf.Elapsed.Milliseconds.ToString()}ms)";
                 SetSelectedRowIndexFromTab();
-                SetTabTooltip(true);
+                SetTabTooltip();
 
                 if (!_history.Any(h => h.FileValue.Equals(sourceFile) && h.GrepyValue.Equals(grep) && h.DLLValue.Equals(dll)))
                 {

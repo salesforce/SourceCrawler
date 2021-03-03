@@ -177,7 +177,7 @@ namespace SourceCrawler
             this.lblResultCount.AutoSize = true;
             this.lblResultCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblResultCount.ForeColor = System.Drawing.Color.Green;
-            this.lblResultCount.Location = new System.Drawing.Point(966, 75);
+            this.lblResultCount.Location = new System.Drawing.Point(966, 77);
             this.lblResultCount.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblResultCount.Name = "lblResultCount";
             this.lblResultCount.Size = new System.Drawing.Size(14, 13);
@@ -490,9 +490,9 @@ namespace SourceCrawler
             this.lblHistoryPosition.AutoSize = true;
             this.lblHistoryPosition.Location = new System.Drawing.Point(546, 76);
             this.lblHistoryPosition.Name = "lblHistoryPosition";
-            this.lblHistoryPosition.Size = new System.Drawing.Size(23, 13);
+            this.lblHistoryPosition.Size = new System.Drawing.Size(21, 13);
             this.lblHistoryPosition.TabIndex = 25;
-            this.lblHistoryPosition.Text = "hist";
+            this.lblHistoryPosition.Text = "hst";
             this.lblHistoryPosition.Click += new System.EventHandler(this.lblHistoryPosition_Click);
             this.lblHistoryPosition.MouseHover += new System.EventHandler(this.lblHistoryPosition_MouseHover);
             // 
@@ -529,7 +529,7 @@ namespace SourceCrawler
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = ".Net Source File Crawler (2020.08)";
+            this.Text = ".Net Source File Crawler (2021.02)";
             this.Load += new System.EventHandler(this.Main_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
